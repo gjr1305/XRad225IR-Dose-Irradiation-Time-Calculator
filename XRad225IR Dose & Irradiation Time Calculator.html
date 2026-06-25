@@ -787,6 +787,236 @@
   .panel.tinted{
     background: var(--panel-raised);
   }
+
+  /* ============================================================
+     VISUAL POLISH — hierarchy, micro-interactions, depth
+     ============================================================ */
+
+  /* ---- Richer shadows & card depth ---- */
+  :root{
+    --shadow-card: 0 1px 3px rgba(34,30,24,0.06), 0 6px 24px rgba(34,30,24,0.07);
+    --shadow-hero: 0 2px 4px rgba(34,30,24,0.06), 0 12px 40px rgba(34,30,24,0.10);
+    --radius-card: 14px;
+    --transition: 0.18s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .panel{
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    transition: box-shadow var(--transition);
+  }
+  .panel:hover{ box-shadow: 0 2px 6px rgba(34,30,24,0.08), 0 12px 36px rgba(34,30,24,0.10); }
+
+  .ctrl-section{
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    transition: box-shadow var(--transition), border-color var(--transition);
+  }
+  .ctrl-section:hover{ border-color: var(--text-faint); }
+
+  /* ---- Result hero: make the number the centrepiece ---- */
+  .result-hero{
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-hero);
+    padding: 40px 40px 36px 40px;
+    background: var(--panel);
+    /* subtle inner grain texture */
+    background-image: radial-gradient(ellipse at 80% 20%, rgba(184,112,62,0.04) 0%, transparent 60%);
+  }
+  .result-hero.al{
+    background-image: radial-gradient(ellipse at 80% 20%, rgba(45,125,125,0.04) 0%, transparent 60%);
+  }
+  /* Thicker accent ribbon */
+  .result-hero .ribbon{ height: 5px; }
+
+  /* Animate result number on change via a flash keyframe */
+  @keyframes result-flash{
+    0%  { opacity: 0.3; transform: scale(0.97); }
+    60% { opacity: 1;   transform: scale(1.01); }
+    100%{ opacity: 1;   transform: scale(1); }
+  }
+  .result-value{
+    font-size: 72px;
+    letter-spacing: -0.03em;
+    transition: color var(--transition);
+  }
+  .result-value.flash{ animation: result-flash 0.32s ease forwards; }
+
+  /* Larger label-to-number contrast */
+  .result-label{
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    margin-bottom: 16px;
+  }
+
+  /* Dose-rate progress bar in result hero */
+  .result-bar-wrap{
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line-soft);
+  }
+  .result-bar-label{
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+  }
+  .result-bar-track{
+    height: 6px;
+    background: var(--line);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .result-bar-fill{
+    height: 100%;
+    border-radius: 3px;
+    background: var(--cu);
+    transition: width 0.45s cubic-bezier(0.4,0,0.2,1), background 0.3s ease;
+    min-width: 2px;
+  }
+  .result-hero.al .result-bar-fill{ background: var(--al); }
+  .result-bar-range{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-faint);
+  }
+
+  /* ---- Mode toggle: richer active state ---- */
+  .mode-toggle{
+    border-radius: 10px;
+    padding: 4px;
+  }
+  .mode-toggle button{
+    border-radius: 7px;
+    transition: all var(--transition);
+    letter-spacing: 0.01em;
+  }
+  .mode-toggle button.active{
+    box-shadow: 0 1px 4px rgba(34,30,24,0.10), 0 2px 8px rgba(34,30,24,0.06);
+  }
+
+  /* ---- Filter toggle: smoother transitions ---- */
+  .filter-toggle button{
+    transition: all var(--transition);
+    border-radius: 9px;
+  }
+  .filter-toggle button:hover:not(.active){
+    border-color: var(--text-dim);
+    background: var(--panel);
+  }
+
+  /* ---- Radio options: hover lift + faster active transition ---- */
+  .radio-opt{
+    transition: border-color var(--transition), background var(--transition),
+                box-shadow var(--transition), transform var(--transition);
+    border-radius: 8px;
+  }
+  .radio-opt:hover{
+    border-color: var(--cu);
+    background: var(--panel);
+    box-shadow: 0 2px 8px rgba(184,112,62,0.08);
+    transform: translateY(-1px);
+  }
+  .radio-opt.active{
+    box-shadow: 0 0 0 1px var(--cu-line), 0 2px 8px rgba(184,112,62,0.10);
+  }
+
+  /* ---- Number input: glow on focus ---- */
+  .field input[type="number"]:focus{
+    border-color: var(--cu);
+    box-shadow: 0 0 0 3px var(--cu-soft);
+  }
+
+  /* ---- Slider thumb: hover scale ---- */
+  input[type="range"]::-webkit-slider-thumb{
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  input[type="range"]:hover::-webkit-slider-thumb{
+    transform: scale(1.2);
+    box-shadow: 0 0 0 3px var(--cu-soft), 0 0 0 1px var(--cu-line);
+  }
+
+  /* ---- Breakdown table: scientific report feel ---- */
+  .breakdown{
+    font-size: 12.5px;
+  }
+  .breakdown tbody tr{
+    transition: background var(--transition);
+  }
+  .breakdown tbody tr:hover td{
+    background: var(--panel-raised);
+  }
+  /* Step number badge on the name column */
+  .breakdown td.step-name{
+    font-size: 12.5px;
+    padding-left: 2px;
+  }
+  /* Stronger value emphasis */
+  .breakdown td.step-val{
+    font-size: 12.5px;
+    letter-spacing: -0.01em;
+  }
+  /* Factor column lighter, smaller */
+  .breakdown td.step-factor{
+    font-size: 11px;
+    opacity: 0.75;
+  }
+  /* Final "Set timer to" row highlight */
+  .breakdown tr:last-child td{
+    background: var(--panel-raised);
+    border-radius: 0;
+  }
+  .breakdown tr:last-child td.step-name{
+    border-radius: 6px 0 0 6px;
+    padding-left: 10px;
+  }
+  .breakdown tr:last-child td.step-factor{
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* ---- Note box: softer, more readable ---- */
+  .note-box{
+    border-radius: 9px;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  /* ---- Spec chips in header: subtle hover ---- */
+  .spec-chip{
+    transition: background var(--transition);
+  }
+  .spec-chip:hover{ background: var(--panel-raised); }
+
+  /* ---- Zone label: bolder separation ---- */
+  .zone-label{
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid var(--line);
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  /* ---- Field map: pip hover highlight ---- */
+  .fm-pip, .well-cell{
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+  .well-cell:hover, .fm-pip:hover{
+    transform: scale(1.06);
+    box-shadow: 0 2px 10px rgba(34,30,24,0.12);
+    z-index: 2;
+    position: relative;
+  }
+
+  /* ---- Footer: slightly more breathing room ---- */
+  footer{
+    letter-spacing: 0.02em;
+  }
 </style>
 </head>
 <body>
@@ -928,6 +1158,17 @@
         <div class="result-label" id="result-label">Required irradiation time</div>
         <div class="result-value" id="result-value">157.0<span class="unit">s</span></div>
         <div class="result-sub" id="result-sub"></div>
+        <div class="result-bar-wrap">
+          <div class="result-bar-label">Dose rate relative to max reference</div>
+          <div class="result-bar-track">
+            <div class="result-bar-fill" id="result-bar-fill" style="width:0%"></div>
+          </div>
+          <div class="result-bar-range">
+            <span>0 Gy/min</span>
+            <span id="result-bar-now"></span>
+            <span>1.06 Gy/min</span>
+          </div>
+        </div>
       </div>
 
       <div class="panel panel-full">
@@ -1383,6 +1624,18 @@ function compute(){
   // near field warning
   document.getElementById('nearfield-warn').style.display = nearfield ? 'block' : 'none';
   document.getElementById('ssd-note').textContent = state.ssd === 60 ? '(at anchor)' : '';
+
+  // result flash animation
+  const rv = document.getElementById('result-value');
+  rv.classList.remove('flash');
+  void rv.offsetWidth; // force reflow to restart animation
+  rv.classList.add('flash');
+
+  // dose-rate bar — fills proportionally against the max reference rate (Al full = 1.0608 Gy/min)
+  const MAX_DR = 1.0608;
+  const pct = Math.min(100, (drPerSec * 60 / MAX_DR) * 100);
+  document.getElementById('result-bar-fill').style.width = pct.toFixed(1) + '%';
+  document.getElementById('result-bar-now').textContent = (drPerSec * 60).toFixed(4) + ' Gy/min';
 }
 
 function geometryLabel(g){
